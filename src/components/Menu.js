@@ -2,7 +2,7 @@ import React from 'react';
 import MenuItems from './MenuItems';
 
 const Menu = props => {
-  const { menu } = props;
+  const { menu, addItem } = props;
 
   const nonEmptyMenuKeys = Object.keys(menu).filter(menuKey => {
     const menuContent = menu[menuKey];
@@ -12,7 +12,7 @@ const Menu = props => {
   return (
     <div className="Menu">
       {nonEmptyMenuKeys.map(menuKey => {
-        return <MenuItems key={menuKey} name={menuKey} items={menu[menuKey]} />;
+        return <MenuItems key={menuKey} name={menuKey} items={menu[menuKey]} addItem={addItem} />;
       })}
     </div>
   );

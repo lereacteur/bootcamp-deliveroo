@@ -2,10 +2,10 @@ import React from 'react';
 import StarIcon from './StarIcon';
 
 const MenuItem = props => {
-  const { item } = props;
+  const { item, onClick } = props;
   return (
     <div className="MenuItem">
-      <div className="MenuItem--card">
+      <div className="MenuItem--card" onClick={onClick}>
         <div className="MenuItem--texts">
           <h3>{item.title}</h3>
           {item.description && item.description.length > 0 && <p>{item.description}</p>}
