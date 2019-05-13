@@ -6,18 +6,18 @@ import Content from './Content';
 class App extends React.Component {
   state = {
     cart: [
-      {
-        id: '1519055545-88',
-        price: 25,
-        title: 'Brunch authentique 1 personne',
-        amount: 2,
-      },
-      {
-        id: '1519055545-89',
-        price: 25,
-        title: 'Brunch authentique 1 personne',
-        amount: 2,
-      },
+      // {
+      //   id: '1519055545-88',
+      //   price: 25,
+      //   title: 'Brunch authentique 1 personne',
+      //   amount: 2,
+      // },
+      // {
+      //   id: '1519055545-89',
+      //   price: 25,
+      //   title: 'Brunch authentique 1 personne',
+      //   amount: 2,
+      // },
     ],
     data: null,
   };
