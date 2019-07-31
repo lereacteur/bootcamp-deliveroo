@@ -77,7 +77,7 @@ class App extends React.Component {
     return;
   };
 
-  render() {
+  render = () => {
     return (
       <div>
         <Header restaurant={this.state.data ? this.state.data.restaurant : null} />
@@ -89,9 +89,9 @@ class App extends React.Component {
         />
       </div>
     );
-  }
+  };
 
-  async componentDidMount() {
+  componentDidMount = async () => {
     const response = await axios.get('https://deliveroo-api.now.sh/menu');
     Object.keys(response.data.menu).forEach(menuKey => {
       response.data.menu[menuKey].forEach(menuItem => {
@@ -102,7 +102,7 @@ class App extends React.Component {
     this.setState({
       data: response.data,
     });
-  }
+  };
 }
 
 export default App;
