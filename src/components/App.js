@@ -95,7 +95,7 @@ class App extends React.Component {
     const response = await axios.get('https://deliveroo-api.now.sh/menu');
     Object.keys(response.data.menu).forEach(menuKey => {
       response.data.menu[menuKey].forEach(menuItem => {
-        menuItem.price = parseInt(menuItem.price, 10);
+        menuItem.price = parseFloat(menuItem.price);
       });
     });
 
