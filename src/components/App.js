@@ -1,44 +1,41 @@
-import React from 'react';
-import axios from 'axios';
-import Header from './Header';
-import Content from './Content';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Header from "./Header";
+import Content from "./Content";
 
-class App extends React.Component {
-  state = {
-    cart: [
-      // {
-      //   id: '1519055545-88',
-      //   price: 25,
-      //   title: 'Brunch authentique 1 personne',
-      //   amount: 2,
-      // },
-      // {
-      //   id: '1519055545-89',
-      //   price: 25,
-      //   title: 'Brunch authentique 1 personne',
-      //   amount: 2,
-      // },
-    ],
-    data: null,
-  };
+const App = () => {
+  const [data, setData] = useState(null);
+  const [cart, setCart] = useState([
+    // {
+    //   id: '1519055545-88',
+    //   price: 25,
+    //   title: 'Brunch authentique 1 personne',
+    //   amount: 2,
+    // },
+    // {
+    //   id: '1519055545-89',
+    //   price: 25,
+    //   title: 'Brunch authentique 1 personne',
+    //   amount: 2,
+    // },
+  ]);
 
-  addItem = itemId => {
-    const exist = this.state.cart.find(cartItem => cartItem.id === itemId);
+  const addItem = itemId => {
+    const exist = cart.find(cartItem => cartItem.id === itemId);
     if (exist) {
-      const index = this.state.cart.indexOf(exist);
-      const nextCart = [...this.state.cart];
+      const index = cart.indexOf(exist);
+      const nextCart = [...cart];
       nextCart[index] = {
         ...nextCart[index],
-        amount: nextCart[index].amount + 1,
+        amount: nextCart[index].amount + 1
       };
-      this.setState({ cart: nextCart });
-      return;
+      setCart(nextCart);
     } else {
       // add
       // find item in data
       let item = null;
-      Object.keys(this.state.data.menu).forEach(menuKey => {
-        this.state.data.menu[menuKey].forEach(menuItem => {
+      Object.keys(data.menu).forEach(menuKey => {
+        data.menu[menuKey].forEach(menuItem => {
           if (menuItem.id === itemId) {
             item = menuItem;
           }
@@ -48,61 +45,60 @@ class App extends React.Component {
         console.error(`Cannot find item ${itemId}`);
         return;
       }
-      const nextCart = [...this.state.cart];
+      const nextCart = [...cart];
       nextCart.push({
         id: itemId,
         title: item.title,
         price: item.price,
-        amount: 1,
+        amount: 1
       });
-      this.setState({ cart: nextCart });
-      return;
+      setCart(nextCart);
     }
   };
 
-  removeItem = itemId => {
-    const exist = this.state.cart.find(cartItem => cartItem.id === itemId);
+  const removeItem = itemId => {
+    const exist = cart.find(cartItem => cartItem.id === itemId);
     if (!exist) {
       console.error(`Cannot remove iten not in cart !`);
       return;
     }
-    const index = this.state.cart.indexOf(exist);
-    const nextCart = [...this.state.cart];
+    const index = cart.indexOf(exist);
+    const nextCart = [...cart];
     nextCart[index] = {
       ...nextCart[index],
-      amount: nextCart[index].amount - 1,
+      amount: nextCart[index].amount - 1
     };
     const cartNotZero = nextCart.filter(cartItem => cartItem.amount > 0);
-    this.setState({ cart: cartNotZero });
-    return;
+    setCart(cartNotZero);
   };
 
-  render = () => {
-    return (
-      <div>
-        <Header restaurant={this.state.data ? this.state.data.restaurant : null} />
-        <Content
-          menu={this.state.data ? this.state.data.menu : null}
-          cart={this.state.cart}
-          addItem={this.addItem}
-          removeItem={this.removeItem}
-        />
-      </div>
-    );
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await axios.get("https://deliveroo-api.now.sh/menu");
 
-  componentDidMount = async () => {
-    const response = await axios.get('https://deliveroo-api.now.sh/menu');
-    Object.keys(response.data.menu).forEach(menuKey => {
-      response.data.menu[menuKey].forEach(menuItem => {
-        menuItem.price = parseFloat(menuItem.price);
+      Object.keys(response.data.menu).forEach(menuKey => {
+        response.data.menu[menuKey].forEach(menuItem => {
+          menuItem.price = parseFloat(menuItem.price);
+        });
       });
-    });
 
-    this.setState({
-      data: response.data,
-    });
-  };
-}
+      setData(response.data);
+    };
+
+    fetchData();
+  }, []);
+
+  return (
+    <div>
+      <Header restaurant={data ? data.restaurant : null} />
+      <Content
+        menu={data ? data.menu : null}
+        cart={cart}
+        addItem={addItem}
+        removeItem={removeItem}
+      />
+    </div>
+  );
+};
 
 export default App;
